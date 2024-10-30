@@ -271,6 +271,31 @@ require('lazy').setup({
   },
 
   {
+    'junegunn/fzf',
+    dir = '~/.fzf',
+    build = './install --all',
+    lazy = true,
+  },
+  {
+    'junegunn/fzf.vim',
+    cmd = {
+      'Files',
+      'GFiles',
+      'Buffers',
+      'Colors',
+      'Rg',
+      'RG',
+      'Lines',
+      'BLines',
+      'Marks',
+      'Jumps',
+      'History',
+      'Commits',
+      'BCommits',
+    },
+  },
+
+  {
     'echasnovski/mini.indentscope',
     event = { 'BufReadPre', 'BufNewFile' },
     opts = {
@@ -281,10 +306,12 @@ require('lazy').setup({
         end,
       },
       options = { border = 'top', try_as_border = true },
-      symbol = '▏',
+      symbol = '│',
     },
     config = function(_, opts)
       require('mini.indentscope').setup(opts)
+
+      vim.api.nvim_set_hl(0, 'MiniIndentscopeSymbol', { fg = '#555555' })
 
       -- Disable for certain filetypes
       vim.api.nvim_create_autocmd({ 'FileType' }, {
