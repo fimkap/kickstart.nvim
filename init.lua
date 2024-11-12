@@ -147,7 +147,7 @@ vim.opt.updatetime = 250
 
 -- Decrease mapped sequence wait time
 -- Displays which-key popup sooner
-vim.opt.timeoutlen = 300
+vim.opt.timeoutlen = 500
 
 -- Configure how new splits should be opened
 vim.opt.splitright = true
@@ -173,7 +173,7 @@ vim.opt.scrolloff = 10
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set('n', '<Leader>k', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -184,7 +184,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 --
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+-- vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -274,7 +274,7 @@ require('lazy').setup({
     'junegunn/fzf',
     dir = '~/.fzf',
     build = './install --all',
-    lazy = true,
+    lazy = false,
   },
   {
     'junegunn/fzf.vim',
@@ -293,6 +293,10 @@ require('lazy').setup({
       'Commits',
       'BCommits',
     },
+    init = function()
+      -- vim.g.fzf_layout = { down = '~40%' }
+      vim.keymap.set('n', '<M-b>', '<cmd>Buffers<CR>')
+    end,
   },
 
   {
@@ -357,6 +361,29 @@ require('lazy').setup({
       }
     end,
   },
+
+  -- {
+  --   'luukvbaal/statuscol.nvim',
+  --   config = function()
+  --     -- local builtin = require 'statuscol.builtin'
+  --     require('statuscol').setup {
+  --       -- configuration goes here, for example:
+  --       --   relculright = true,
+  --       --   segments = {
+  --       --     { text = { builtin.foldfunc }, click = 'v:lua.ScFa' },
+  --       --     {
+  --       --       sign = { namespace = { 'diagnostic/signs' }, maxwidth = 2, auto = true },
+  --       --       click = 'v:lua.ScSa',
+  --       --     },
+  --       --     { text = { builtin.lnumfunc }, click = 'v:lua.ScLa' },
+  --       --     {
+  --       --       sign = { name = { '.*' }, maxwidth = 2, colwidth = 1, auto = true, wrap = true },
+  --       --       click = 'v:lua.ScSa',
+  --       --     },
+  --       --   },
+  --     }
+  --   end,
+  -- },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -809,22 +836,6 @@ require('lazy').setup({
     },
     opts = {
       notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true, python = true, typescript = true, typescriptreact = true, javascript = true }
-        local lsp_format_opt
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          lsp_format_opt = 'never'
-        else
-          lsp_format_opt = 'fallback'
-        end
-        return {
-          timeout_ms = 500,
-          lsp_format = lsp_format_opt,
-        }
-      end,
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
