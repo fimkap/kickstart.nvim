@@ -300,6 +300,13 @@ require('lazy').setup({
   },
 
   {
+    "girishji/pythondoc.vim",
+    opts = {},
+    config = function()
+    end,
+  },
+
+  {
     'echasnovski/mini.indentscope',
     event = { 'BufReadPre', 'BufNewFile' },
     opts = {

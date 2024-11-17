@@ -37,8 +37,12 @@ return {
     -- others config
   },
   -- config = function(_, opts)
-  --   -- Adding rules from plugin
-  --   opts.nesting_rules = require('neotree-file-nesting-config').nesting_rules
-  --   require('neo-tree').setup(opts)
+  --   vim.schedule(function()
+  --     -- Unlink NeoTreeNormalNC from NormalNC
+  --     vim.cmd 'highlight! link NeoTreeNormalNC NONE'
+  --
+  --     -- Set the background color for NeoTreeNormalNC
+  --     vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = '#181919' })
+  --   end)
   -- end,
 }
