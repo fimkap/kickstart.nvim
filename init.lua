@@ -107,10 +107,15 @@ vim.diagnostic.config {
       [vim.diagnostic.severity.HINT] = '',
     },
   },
+  virtual_text = false,
 }
+
+-- vim.o.background = 'light'
 
 -- Make line numbers default
 vim.opt.number = true
+
+vim.opt.diffopt:append("iwhite")
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
 -- vim.opt.relativenumber = true
@@ -167,6 +172,9 @@ vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
+
+vim.o.guifont = 'JetBrainsMonoNL Nerd Font:h11.2:style=Light'
+vim.g.neovide_cursor_animation_length = 0
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -271,6 +279,38 @@ require('lazy').setup({
   },
 
   {
+    'rachartier/tiny-inline-diagnostic.nvim',
+    event = 'VeryLazy', -- Or `LspAttach`
+    priority = 1000, -- needs to be loaded in first
+    config = function()
+      require('tiny-inline-diagnostic').setup()
+    end,
+  },
+  {
+    'chentoast/marks.nvim',
+    event = 'VeryLazy',
+    opts = {
+      default_mappings = false,
+      bookmark_0 = {
+        sign = '󱍻',
+        virt_text = '',
+      },
+      mappings = {
+        set_bookmark0 = 'mm',
+        delete_bookmark = 'mx',
+        next_bookmark0 = '[r',
+        prev_bookmark0 = ']r',
+        annotate = 'mt',
+      },
+      refresh_interval = 0,
+    },
+    config = function(_, opts)
+      -- Apply the options manually
+      require('marks').setup(opts)
+      vim.cmd [[highlight MarkSignHL guifg=orange]]
+    end,
+  },
+  {
     'junegunn/fzf',
     dir = '~/.fzf',
     build = './install --all',
@@ -300,10 +340,9 @@ require('lazy').setup({
   },
 
   {
-    "girishji/pythondoc.vim",
+    'girishji/pythondoc.vim',
     opts = {},
-    config = function()
-    end,
+    config = function() end,
   },
 
   {
@@ -549,6 +588,9 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        defaults = {
+          path_display = { 'tail' },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
