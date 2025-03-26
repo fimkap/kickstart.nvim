@@ -135,6 +135,7 @@ vim.o.shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
 vim.o.shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
 vim.o.shellquote = ''
 vim.o.shellxquote = ''
+vim.o.scrollback = 10000
 -- Exit terminal mode with F1
 vim.keymap.set('t', '<F1>', '<C-\\><C-n>', { noremap = true, silent = true })
 
@@ -340,6 +341,7 @@ require('lazy').setup({
   },
   {
     'junegunn/fzf.vim',
+    lazy = false,
     cmd = {
       'Files',
       'GFiles',
