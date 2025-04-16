@@ -115,6 +115,9 @@ vim.diagnostic.config {
 -- Make line numbers default
 vim.opt.number = true
 
+-- Disable swapfile creation
+vim.opt.swapfile = false
+
 vim.opt.diffopt:append 'iwhite'
 -- vim.opt.signcolumn = "yes:2"
 vim.opt.guicursor = 'n:hor10,i-ci-ve:ver25'
@@ -468,6 +471,7 @@ require('lazy').setup({
       {
         -- Make sure to set this up properly if you have lazy=true
         'MeanderingProgrammer/render-markdown.nvim',
+        enabled = false, -- disable the plugin
         opts = {
           file_types = { 'markdown', 'Avante' },
         },
@@ -1132,6 +1136,8 @@ require('lazy').setup({
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  -- { 'rhysd/conflict-marker.vim' },
+  { 'sindrets/diffview.nvim' },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
@@ -1155,12 +1161,19 @@ require('lazy').setup({
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
+
+      -- Load your custom Bitcoin price module (using the proper require path)
+      -- local btc = require("btc.bitcoin_price")
+
       -- set use_icons to true if you have a Nerd Font
       statusline.setup { use_icons = vim.g.have_nerd_font }
 
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
+      -- statusline.section_location = function()
+      --   return btc.statusline_component(),'%2l:%-2v'
+      -- end
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
         return '%2l:%-2v'
@@ -1215,9 +1228,7 @@ require('lazy').setup({
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  --  For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -1237,6 +1248,16 @@ require('lazy').setup({
       task = '📌',
       lazy = '💤 ',
     },
+  },
+})
+
+-- Load local modules
+local setup_git_preview = require('git-conflict-preview.preview')
+setup_git_preview({
+  key_binding = '<leader>gd',
+  virtual_text = {
+    text = '󱓌 Preview diff',
+    hl_group = 'GitConflictPreview',
   },
 })
 
